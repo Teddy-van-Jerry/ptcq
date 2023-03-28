@@ -5,16 +5,31 @@
 
 PTCQ
 ====
-PyTorch Complex Quantization
+**PyTorch Complex Quantization**
+
+.. note::
+    The quantization is used for result simulation only.
+    It is **not** intended for computation acceleration.
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    :maxdepth: 2
 
+    concept
+    install
+    api/index
+    tutorial
+
+
+.. toctree::
+    :maxdepth: 2
+    :caption: More Information
+
+    author
+    license
 
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`

@@ -6,6 +6,11 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+import os
+import sys
+
+sys.path.insert(0, os.path.abspath('..'))
+
 project = 'PTCQ'
 copyright = '2023, Teddy van Jerry (Wuqiong Zhao)'
 author = 'Teddy van Jerry (Wuqiong Zhao)'
@@ -13,7 +18,10 @@ author = 'Teddy van Jerry (Wuqiong Zhao)'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = []
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx_copybutton'
+]
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
