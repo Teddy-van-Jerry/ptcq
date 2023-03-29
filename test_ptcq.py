@@ -1,3 +1,12 @@
 import ptcq
+import torch
 
-ptcq.helloWorld()
+fixed_q = ptcq.FixedQ(5, 3)
+a = torch.rand(5)
+print(a)
+fixed_q.quantize_self(a)
+print(a)
+
+b = 1.214
+print(b)
+print(fixed_q.quantize(b))
