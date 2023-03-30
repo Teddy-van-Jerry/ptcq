@@ -27,10 +27,10 @@ To simplify the use, several method aliases are defined.
 
 .. automethod:: FixedQ.cqs
 
+----
+
 The :class:`.FixedCQ` class provides a unified way for fixed-point complex quantization.
 This is a supplement to :class:`.FixedQ` where both real and complex versions are supported.
-
-----
 
 .. autoclass:: FixedCQ
 

@@ -10,6 +10,7 @@ PTCQ
 .. note::
     The quantization is used for result simulation only.
     It is **not** intended for computation acceleration.
+    View :doc:`the Concept page <concept>` for more information.
 
 .. toctree::
     :maxdepth: 2
