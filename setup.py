@@ -10,6 +10,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         'torch>=1.0.0',
+        'numpy>=1.0.0',
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',
@@ -20,5 +21,7 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
     ],
 )
