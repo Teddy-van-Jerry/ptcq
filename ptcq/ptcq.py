@@ -13,7 +13,7 @@ def round_(x):
 def clip_(x, dwt):
     min_v = -(1 << (dwt - 1))
     max_v = (1 << (dwt - 1)) - 1
-    return numpy.clip(x, min_v, max_v) if torch.is_tensor(x) else numpy.clip(x, min_v, max_v)
+    return torch.clip(x, min_v, max_v) if torch.is_tensor(x) else numpy.clip(x, min_v, max_v)
 
 class FixedQ:
     """Fixed-point quantization.
