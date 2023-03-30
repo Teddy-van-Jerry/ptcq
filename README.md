@@ -4,6 +4,16 @@ PyTorch Complex Quantization
 > **Note** The quantization is used for result simulation only.
 > It is **not** intended for computation acceleration.
 
+## Installation
+Install with `pip`:
+```
+pip install ptcq
+```
+Install from GitHub Repo:
+```
+pip install git+https://github.com/Teddy-van-Jerry/ptcq.git
+```
+
 ## Limitations
 PTCQ is actually **fake** quantization that simulates the quantization behavior.
 - It does not consider the internal computation quantization process;
