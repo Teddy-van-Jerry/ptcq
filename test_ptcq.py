@@ -10,3 +10,5 @@ print(a)
 b = 1.214
 print(b)
 print(fixed_q.quantize(b))
+
+print(ptcq.fixed_quantize(1.234, 5, 3))

@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='ptcq',
-    version='0.1.0',
+    version='0.1.1',
     description='PyTorch Complex Quantization',
     author='Teddy van Jerry (Wuqiong Zhao)',
     author_email='me@teddy-van-jerry.org',
@@ -13,7 +13,7 @@ setup(
         'numpy>=1.0.0',
     ],
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',

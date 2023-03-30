@@ -58,4 +58,9 @@ To simplify the use, several method aliases are defined.
 
 ----
 
+Standalone Functions
+--------------------
+
 There are also standalone functions available.
+
+.. autofunction:: fixed_quantize

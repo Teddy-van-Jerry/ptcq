@@ -7,6 +7,13 @@ PTCQ
 ====
 **PyTorch Complex Quantization**
 
+.. image:: https://img.shields.io/pypi/v/ptcq
+   :alt: PyPI
+   :target: https://pypi.org/project/ptcq/
+.. image:: https://img.shields.io/pypi/l/ptcq
+   :alt: PyPI - License
+   :target: https://github.com/Teddy-van-Jerry/ptcq/blob/master/LICENSE
+
 .. note::
     The quantization is used for result simulation only.
     It is **not** intended for computation acceleration.

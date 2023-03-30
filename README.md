@@ -1,6 +1,9 @@
 # PTCQ
 PyTorch Complex Quantization
 
+[![PyPI](https://img.shields.io/pypi/v/ptcq)](https://pypi.org/project/ptcq/)
+[![PyPI - License](https://img.shields.io/pypi/l/ptcq)](LICENSE)
+
 > **Note** The quantization is used for result simulation only.
 > It is **not** intended for computation acceleration.
 

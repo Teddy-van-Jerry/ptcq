@@ -50,7 +50,7 @@ class FixedQ:
         :param x: Input.
         :type x: float or torch.Tensor
         :return: The quantized result.
-        :rtype: The same as input
+        :rtype: same as input
 
         Example use::
 
@@ -107,7 +107,7 @@ class FixedQ:
         :param x: Input.
         :type x: complex float or complex torch.Tensor
         :return: The quantized result.
-        :rtype: The same as input
+        :rtype: same as input
 
         The following example shows the quantization of a normal complex number::
 
@@ -189,7 +189,7 @@ class FixedCQ:
         :param x: Input
         :type x: real float or torch.Tensor
         :return: The quantized result.
-        :rtype: The same as input
+        :rtype: same as input
 
         .. tip::
             This is the same implementation of :func:`ptcq.FixedQ.quantize`.
@@ -207,7 +207,7 @@ class FixedCQ:
         :param x: Input.
         :type x: complex float or complex torch.Tensor
         :return: The quantized result.
-        :rtype: The same as input
+        :rtype: same as input
 
         .. seealso:: This is equivalent to :func:`ptcq.FixedQ.complex_quantize`.
 
@@ -268,3 +268,40 @@ class FixedCQ:
 
     cqs = quantize_self
     """Alias for :func:`~ptcq.FixedCQ.quantize_self`"""
+
+def fixed_quantize(x, W, D):
+    """Fixed-point quantization for both real and complex input.
+
+    :param x: Input.
+    :type x: float or torch.Tensor
+    :param W: Data bit width.
+    :type W: unsigned integer
+    :param D: Decimal bit width. This is the number of bits after the decimal point. It can be zero or negative.
+    :type D: integer
+    :return: The quantized result.
+    :rtype: same as input
+
+    .. note::
+        This internally employs :class:`.FixedQ` and :class:`.FixedCQ`.
+        See their documentation for more information.
+
+    Example use::
+
+        >>> ptcq.fixed_quantize(1.23, 5, 3)
+        1.25
+        >>> ptcq.fixed_quantize(0.3 + 0.4j, 3, 4)
+        (0.1875+0.1875j)
+        >>> a = torch.randn((2, 3))
+        >>> print(a)
+        tensor([[ 0.0456,  2.5668, -0.6227],
+                [ 0.1132,  0.3782, -0.4859]])
+        >>> ptcq.fixed_quantize(a, 4, 3)
+        tensor([[ 0.0000,  0.8750, -0.6250],
+                [ 0.1250,  0.3750, -0.5000]])
+    """
+    if torch.is_tensor(x):
+        return FixedCQ(W, D).quantize(x) if torch.is_complex(x) \
+            else FixedQ(W, D).quantize(x)
+    else:
+        return FixedCQ(W, D).quantize(x) if isinstance(x, complex) \
+            else FixedQ(W, D).quantize(x)
