@@ -109,11 +109,6 @@ class FixedQ:
         :return: The quantized result.
         :rtype: The same as input
 
-        .. Caution::
-            The input ``x`` must be a ``torch.Tensor``!
-            Otherwise a warning will be raised and the input value is not changed.
-            This is similar to :func:`~ptcq.FixedQ.quantize_self`.
-
         The following example shows the quantization of a normal complex number::
 
             >>> q = ptcq.FixedQ(5, 3)
@@ -135,6 +130,11 @@ class FixedQ:
         :param x: Input
         :type x: complex torch.Tensor
         :raises Warning: Nothing will be done if the input is not a torch.Tensor.
+
+        .. Caution::
+            The input ``x`` must be a ``torch.Tensor``!
+            Otherwise a warning will be raised and the input value is not changed.
+            This is similar to :func:`~ptcq.FixedQ.quantize_self`.
 
         Example use for a 2D ``torch.Tensor``::
 
@@ -200,3 +200,71 @@ class FixedCQ:
         y = clip_(y, self.W)
         y = shift_right_(y, self.D)
         return y
+
+    def quantize(self, x):
+        """Quantize the complex input with the fixed-point scheme.
+
+        :param x: Input.
+        :type x: complex float or complex torch.Tensor
+        :return: The quantized result.
+        :rtype: The same as input
+
+        .. seealso:: This is equivalent to :func:`ptcq.FixedQ.complex_quantize`.
+
+        The following example shows the quantization of a normal complex number::
+
+            >>> q = ptcq.FixedCQ(5, 3)
+            >>> q.quantize(1.23 + 4.56j)
+            (1.25+1.875j)
+        """
+        if torch.is_tensor(x):
+            assert torch.is_complex(x)
+            return torch.complex(self.real_quantize(x.real), self.real_quantize(x.imag))
+        else:
+            return self.real_quantize(x.real) + 1j * self.real_quantize(x.imag)
+        
+    def quantize_self(self, x):
+        """Quantize the input complex tensor (in place) with the fixed-point scheme.
+
+        :param x: Input
+        :type x: complex torch.Tensor
+        :raises Warning: Nothing will be done if the input is not a torch.Tensor.
+
+        .. seealso::
+            This is equivalent to :func:`ptcq.FixedQ.complex_quantize_self`.
+
+        Example use for a 2D ``torch.Tensor``::
+
+            >>> a = torch.complex(torch.randn((2, 3)) * 20, torch.randn((2, 3)) * 30)
+            >>> q = ptcq.FixedCQ(4, -1)
+            >>> print(a)
+            tensor([[-13.4490-8.0800j, -17.3926+42.9472j, -42.3367+26.1402j],
+                    [  3.0652-27.2726j,  -4.9342-23.8858j,  15.8632+23.2699j]])
+            >>> q.quantize_self(a)
+            >>> print(a)
+            tensor([[-14.-8.j, -16.+14.j, -16.+14.j],
+                    [  4.-16.j,  -4.-16.j,  14.+14.j]])
+        """
+        if torch.is_tensor(x):
+            assert(torch.is_complex(x))
+            x[:] = self.quantize(x)
+        else:
+            raise Warning('complex_quantize_self can only be used for torch.Tensor!')
+        
+    complex_quantize = quantize
+    """Alias for :func:`~ptcq.FixedCQ.quantize`."""
+
+    complex_quantize_self = quantize_self
+    """Alias for :func:`~ptcq.FixedCQ.quantize_self`."""
+
+    q = quantize
+    """Alias for :func:`~ptcq.FixedCQ.quantize`."""
+
+    qs = quantize_self
+    """Alias for :func:`~ptcq.FixedCQ.quantize_self`."""
+
+    cq = quantize
+    """Alias for :func:`~ptcq.FixedCQ.quantize`."""
+
+    cqs = quantize_self
+    """Alias for :func:`~ptcq.FixedCQ.quantize_self`"""

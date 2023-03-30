@@ -38,7 +38,23 @@ This is a supplement to :class:`.FixedQ` where both real and complex versions ar
 
 .. automethod:: FixedCQ.real_quantize
 
+.. automethod:: FixedCQ.quantize
+
+.. automethod:: FixedCQ.quantize_self
+
+.. automethod:: FixedCQ.complex_quantize
+
+.. automethod:: FixedCQ.complex_quantize_self
+
 To simplify the use, several method aliases are defined.
+
+.. automethod:: FixedCQ.q
+
+.. automethod:: FixedCQ.qs
+
+.. automethod:: FixedCQ.cq
+
+.. automethod:: FixedCQ.cqs
 
 ----
 
