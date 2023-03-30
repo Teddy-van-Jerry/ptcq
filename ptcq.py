@@ -50,7 +50,7 @@ class FixedQ:
         :param x: Input.
         :type x: float or torch.Tensor
         :return: The quantized result.
-        :rtype: The same with input.
+        :rtype: The same as input
 
         Example use::
 
@@ -75,6 +75,7 @@ class FixedQ:
 
         :param x: Input.
         :type x: torch.Tensor
+        :raises Warning: Nothing will be done if the input is not a torch.Tensor.
 
         .. Caution::
             The input ``x`` must be a ``torch.Tensor``!
@@ -99,6 +100,59 @@ class FixedQ:
             x[:] = self.quantize(x)
         else:
             raise Warning('quantize_self can only be used for torch.Tensor!')
+        
+    def complex_quantize(self, x):
+        """Quantize the complex input with the fixed-point scheme.
+
+        :param x: Input.
+        :type x: complex float or complex torch.Tensor
+        :return: The quantized result.
+        :rtype: The same as input
+
+        .. Caution::
+            The input ``x`` must be a ``torch.Tensor``!
+            Otherwise a warning will be raised and the input value is not changed.
+            This is similar to :func:`~ptcq.FixedQ.quantize_self`.
+
+        The following example shows the quantization of a normal complex number::
+
+            >>> q = ptcq.FixedQ(5, 3)
+            >>> a = torch.complex(torch.randn(2) * 3, torch.randn(2) * 2)
+            >>> print(a)
+            tensor([-0.2857-2.7639j, -4.3387-1.2555j])
+            >>> q.complex_quantize(a)
+            tensor([-0.2500-2.0000j, -2.0000-1.2500j])
+        """
+        if torch.is_tensor(x):
+            assert torch.is_complex(x)
+            return torch.complex(self.quantize(x.real), self.quantize(x.imag))
+        else:
+            return self.quantize(x.real) + 1j * self.quantize(x.imag)
+        
+    def complex_quantize_self(self, x):
+        """Quantize the input complex tensor (in place) with the fixed-point scheme.
+
+        :param x: Input
+        :type x: complex torch.Tensor
+        :raises Warning: Nothing will be done if the input is not a torch.Tensor.
+
+        Example use for a 2D ``torch.Tensor``::
+
+            >>> q = ptcq.FixedQ(5, 3)
+            >>> a = torch.complex(torch.randn((2, 3)), torch.randn((2, 3)))
+            >>> print(a)
+            tensor([[-0.6809-0.8707j,  0.5028+1.0862j,  1.3537+0.3411j],
+                    [ 0.1614-0.6922j, -0.4002-1.1781j,  1.5799-0.1048j]])
+            >>> q.complex_quantize_self(a)
+            >>> a
+            tensor([[-0.6250-0.8750j,  0.5000+1.1250j,  1.3750+0.3750j],
+                    [ 0.1250-0.7500j, -0.3750-1.1250j,  1.6250-0.1250j]])
+        """
+        if torch.is_tensor(x):
+            assert(torch.is_complex(x))
+            x[:] = self.complex_quantize(x)
+        else:
+            raise Warning('complex_quantize_self can only be used for torch.Tensor!')
 
     q = quantize
     """Alias for :func:`~ptcq.FixedQ.quantize`."""
@@ -106,3 +160,43 @@ class FixedQ:
     qs = quantize_self
     """Alias for :func:`~ptcq.FixedQ.quantize_self`."""
 
+    cq = complex_quantize
+    """Alias for :func:`~ptcq.FixedQ.complex_quantize`."""
+
+    cqs = complex_quantize_self
+    """Alias for :func:`~ptcq.FixedQ.complex_quantize_self`"""
+
+class FixedCQ:
+    """Fixed-point complex quantization. (Supplement to :class:`.FixedQ`.)
+    """
+
+    def __init__(self, W, D) -> None:
+        """Initialize the fixed-point complex quantization scheme.
+
+        :param W: Data bit width.
+        :type W: unsigned integer
+        :param D: Decimal bit width. This is the number of bits after the decimal point. It can be zero or negative.
+        :type D: integer
+
+        .. seealso:: Please refer to :func:`ptcq.FixedQ.__init__`.
+        """
+        self.W, self.D = W, D
+        pass
+
+    def real_quantize(self, x):
+        """Quantize the real input with a fixed-point quantization scheme.
+
+        :param x: Input
+        :type x: real float or torch.Tensor
+        :return: The quantized result.
+        :rtype: The same as input
+
+        .. tip::
+            This is the same implementation of :func:`ptcq.FixedQ.quantize`.
+            It is mostly useful for the class internal implementation.
+            You are encouraged to use :func:`ptcq.FixedQ.quantize` over this method.
+        """
+        y = round_(shift_left_(x, self.D))
+        y = clip_(y, self.W)
+        y = shift_right_(y, self.D)
+        return y
